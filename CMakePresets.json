@@ -1,0 +1,26 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 30, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base", "hidden": true, "generator": "Ninja", "binaryDir": "${sourceDir}/o/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
+        "BUILD_SHARED_LIBS": "OFF", "UNREALVOXELSIM_BUILD_TESTS": "ON",
+        "UNREALVOXELSIM_BUILD_MOCKS": "ON", "UNREALVOXELSIM_BUILD_APP": "ON",
+        "UNREALVOXELSIM_BUILD_BENCHMARKS": "OFF"
+      }
+    },
+    {
+      "name": "windows-msvc-base", "hidden": true, "inherits": "base",
+      "architecture": { "value": "x64", "strategy": "external" },
+      "cacheVariables": {
+        "CMAKE_CXX_COMPILER": "cl.exe", "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded$<$<CONFIG:Debug>:Debug>",
+        "VCPKG_HOST_TRIPLET": "x64-windows-static", "VCPKG_TARGET_TRIPLET": "x64-windows-static"
+      },
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" }
+    },
+    { "name": "windows-msvc-debug", "inherits": "windows-msvc-base", "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" } },
+    { "name": "windows-msvc-release", "inherits": "windows-msvc-base", "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" } }
+  ]
+}
